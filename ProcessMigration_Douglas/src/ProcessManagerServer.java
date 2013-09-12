@@ -25,10 +25,7 @@ public class ProcessManagerServer {
 	private String RUN = "run";
 	
 	private String MIG = "migrate";
-	//the pool size of the thread pool for handling sockets
-//	private final int POOL_SIZE = 10;
-//	
-//	private ExecutorService _executorService;
+
 	
 	public static Map<String, Integer> GetClientList() {
 		return clientList;
@@ -37,13 +34,6 @@ public class ProcessManagerServer {
 	public ProcessManagerServer() {}
 	
 	public ProcessManagerServer(String hn, String p) throws IOException {
-//		ServerSocket serSoc = new ServerSocket(10001);
-//		while(true) {
-//			Socket soc = serSoc.accept();
-//			BufferedReader in = new BufferedReader(new InputStreamReader(soc.getInputStream()));
-//			PrintWriter out = new PrintWriter(soc.getOutputStream(), true);
-//		}
-		
 		this._hostName = hn;
 		this._port = Integer.parseInt(p);
 	//	this._executorService=Executors.newFixedThreadPool(POOL_SIZE);
@@ -54,39 +44,14 @@ public class ProcessManagerServer {
 		return this._port;
 	}
 	
-//	public void socketListening() {
-//		ServerSocket serversck = null;
-//		boolean listen = true;
-//		try {
-//			System.out.println("Server is running...");
-//			System.out.println("Waiting for connection...");
-//			serversck = new ServerSocket(this._port);
-//			while(listen) {
-//				Socket socket = serversck.accept();
-//				_executorService.execute(new ServerSocketHandler(socket));
-//			}
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally {
-//			try {
-//				serversck.close();
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//		}
-//	}
 	
 	public void ConsoleHandler() throws IOException {
 		BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 		String input;
 		System.out.print("==>");
 		while((input = in.readLine())!=null) {
-			//System.out.print("==>");
-			//input = in.readLine();
 			if(input.split(" ")[0].toLowerCase().equals(LS)) 
-				LSCommand();
+				LSCommand(input);
 			else 
 				if(input.split(" ")[0].toLowerCase().equals(PS))
 					PSCommand(input);
@@ -104,57 +69,93 @@ public class ProcessManagerServer {
 		}
 	}
 	
+
+	public boolean isNumeric(String str){
+		   for(int i=str.length();--i>=0;){
+		      int chr=str.charAt(i);
+		      if(chr<48 || chr>57)
+		         return false;
+		   }
+		   return true;
+		} 
 	//migrate (src)localhost:10005 (des)localhost:10004 1
 	public void MigrateCommand(String input) {
 		boolean flag = false;
-		if(input.split(" ").length == 4) {
+		boolean flag1 = false;
+		boolean flag2 = false;
+		
+		if(input.split(" ").length == 4 && isNumeric(input.split(" ")[3])) {
 			String SrchostAndPort = input.split(" ")[1];
 			String DeshostAndPort = input.split(" ")[2];
 			
 			synchronized(ServerSocketHandler.ClientListMutex) {
-				if(ProcessManagerServer.GetClientList().containsKey(SrchostAndPort));
+				if(ProcessManagerServer.GetClientList().containsKey(SrchostAndPort)) {
 					flag = true;
+				}
+				if(ProcessManagerServer.GetClientList().containsKey(DeshostAndPort))
+					flag1 = true;
+				if(ProcessManagerServer.GetClientList().get(SrchostAndPort) > Integer.parseInt(input.split(" ")[3])) {
+					flag2 = true;
+				}
 			}
-			if(flag) {
+			if(flag&&flag1) {
 				Thread cmdSender = new Thread(new CommandSender(new ProcessMigrationCommand(SrchostAndPort.split(":")[0], 
 						Integer.parseInt(SrchostAndPort.split(":")[1]), 
 						DeshostAndPort.split(":")[0], 
 						Integer.parseInt(DeshostAndPort.split(":")[1]), Integer.parseInt(input.split(" ")[3]))));
 				cmdSender.start();
-			}
+			} else 
+				if(!flag)
+					System.out.println("Source Hostname or port no found");
+				else
+					if(!flag1) 
+						System.out.println("Destination Hostname or port no found");
+					else
+						if(!flag2)
+							System.out.println("The input number is larger than the number of exist process");
+									
 			//start a commandsender thread to send command to the specific client
 		} else {
-			System.out.println("Usage: ps hostname:port");
-			return;
+			if(input.split(" ").length != 4) {
+				System.out.println("Usage: migrate sourcehostname:sourceport deshostname:desport number");
+				return;
+			} else
+				System.out.println("Require a number");
 		}
 	}
 	
 	//ls
-	public void LSCommand() {
-		synchronized(ServerSocketHandler.ClientListMutex) {
-			Iterator iter = ProcessManagerServer.GetClientList().entrySet().iterator(); 
-			while (iter.hasNext()) { 
-			    Map.Entry entry = (Map.Entry) iter.next(); 
-			    System.out.println("Host: "+entry.getKey()+"\tNumber of Process "+entry.getValue()); 
-			   // Object val = entry.getValue(); 
-			} 
+	public void LSCommand(String input) {
+		if(input.split(" ").length != 1)
+			System.out.println("Usage: ls");
+		else {
+			synchronized(ServerSocketHandler.ClientListMutex) {
+				Iterator iter = ProcessManagerServer.GetClientList().entrySet().iterator(); 
+				while (iter.hasNext()) { 
+				    Map.Entry entry = (Map.Entry) iter.next(); 
+				    System.out.println("Host: "+entry.getKey()+" \t Number of Process: "+entry.getValue()); 
+				   // Object val = entry.getValue(); 
+				} 
+			}
 		}
 	}
 	
 	//ps localhost:10001
 	public void PSCommand(String input) {
 		boolean flag = false;
-		if(input.split(" ").length >= 2) {
+		if(input.split(" ").length == 2) {
 			String hostAndPort = input.split(" ")[1];
 			
 			synchronized(ServerSocketHandler.ClientListMutex) {
-				if(ProcessManagerServer.GetClientList().containsKey(hostAndPort));
+				if(ProcessManagerServer.GetClientList().containsKey(hostAndPort))
 					flag = true;
 			}
 			if(flag) {
 				Thread cmdSender = new Thread(new CommandSender(new PrintProcessCommand(hostAndPort.split(":")[0], 
 						Integer.parseInt(hostAndPort.split(":")[1]))));
 				cmdSender.start();
+			} else {
+				System.out.println("Client or port not found");
 			}
 			//start a commandsender thread to send command to the specific client
 		} else {
@@ -173,7 +174,7 @@ public class ProcessManagerServer {
 			String hostAndPort = arg[1];
 			
 			synchronized(ServerSocketHandler.ClientListMutex) {
-				if(ProcessManagerServer.GetClientList().containsKey(hostAndPort));
+				if(ProcessManagerServer.GetClientList().containsKey(hostAndPort))
 					flag = true;
 			}
 			if(flag) {
@@ -181,10 +182,10 @@ public class ProcessManagerServer {
 						Integer.parseInt(hostAndPort.split(":")[1]), arg, arg.length)));
 				cmdSender.start();
 			} else {
-				System.out.println("Client not found");
+				System.out.println("Client or port not found");
 			}
 		} else {
-			System.out.println("Usage: ps hostname:port");
+			System.out.println("Usage: run hostname:port arg1 arg2 ...");
 			return;
 		}
 		
@@ -208,6 +209,5 @@ public class ProcessManagerServer {
 
 		//socketListener.join();
 		
-		//pms.socketListening();
 	}
 }

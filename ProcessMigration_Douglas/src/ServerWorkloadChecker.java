@@ -11,8 +11,7 @@ public class ServerWorkloadChecker implements Runnable{
 				//System.out.println("The number of clients: "+ProcessManagerServer.GetClientList().size());
 			}
 			
-			
-			
+					
 			try {
 				Thread.currentThread().sleep(3000);
 			} catch (InterruptedException e) {

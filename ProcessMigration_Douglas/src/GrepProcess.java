@@ -15,6 +15,11 @@ public class GrepProcess implements MigratableProcess
 
 	private volatile boolean suspending;
 
+	@Override
+	public String toString() {
+		String name = "GrepProcess";
+		return name;
+	}
 	public GrepProcess(String args[]) throws Exception
 	{
 		if (args.length != 3) {
@@ -44,7 +49,7 @@ public class GrepProcess implements MigratableProcess
 				
 				// Make grep take longer so that we don't require extremely large files for interesting results
 				try {
-					Thread.sleep(60000);
+					Thread.sleep(8000);
 				} catch (InterruptedException e) {
 					// ignore it
 				}

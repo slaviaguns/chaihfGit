@@ -19,7 +19,7 @@ public class ClientCmdHandler extends CommandHandler{
 	}
 	
 	public void HandleProcessMigration(ProcessMigrationCommand p) {
-		p.PrintCommand();
+		//p.PrintCommand();
 		int migNum = p.GetMigNum();
 		MigratableProcess mig = null;
 		while (migNum != 0) { 
@@ -29,18 +29,24 @@ public class ClientCmdHandler extends CommandHandler{
 				  Map.Entry entry = (Map.Entry) iter.next(); 				
 				  mig = (MigratableProcess)entry.getValue();
 				  iter.remove();					  
+				} else {
+					System.out.println("There is no more process in this node");
+					return;
 				}
 			}
 			if(mig != null) {
-				System.out.println("&&&&&&&");
+				System.out.println("*******************************");
+				System.out.println("Waiting for Migrate "+mig.toString()+"...");
 				mig.suspend();
-				System.out.println("^^^^^^");
 				System.out.println(p.GetDesHostName() + " " + p.GetDesPort());
 				Thread t = new Thread(new CommandSender(new ProcessCommand(p.GetDesHostName(), p.GetDesPort(), mig)));			
 				t.start();
+				System.out.println(mig.toString() + " has been migrated out");
+				System.out.println("*******************************");
 				migNum--;
 			} else {
-				System.out.println("@@@@@@@@@@@@@@@@");
+				System.out.println("The process to be migrated is null");
+				return;
 			}
 		}
 	}
@@ -54,7 +60,8 @@ public class ClientCmdHandler extends CommandHandler{
 			theClass = Class.forName(p.GetClassName());
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.err.println(p.GetClassName()+" is not a migratable process");
+			return;
 		}
 		  Object[] obj = {p.GetClassArg()};
 	      MigratableProcess process = (MigratableProcess) theClass.getConstructor(String[].class)
@@ -68,15 +75,27 @@ public class ClientCmdHandler extends CommandHandler{
 	}
 	
 	public void HandlePrintProcess(PrintProcessCommand p) {
-		p.PrintCommand();
+		System.out.println("*******************************");
+		int i = 1;
+		System.out.println("The Process list of " + this._client.GetClientMeta().getHostName()+":"+this._client.GetClientMeta().getPort()+"");
+		synchronized(this._client.ClientListMutex) {
+			Iterator iter = this._client.GetProcessList().entrySet().iterator(); 
+			while(iter.hasNext()) {
+			  Map.Entry entry = (Map.Entry) iter.next(); 				
+			  System.out.println(i+". "+entry.getValue().toString());					  
+			}
+		}
+		System.out.println("*******************************");
 	}
 	
 	
 	public void HandleComingProcess(ProcessCommand p) {
-		p.PrintCommand();
-		MigratableProcess mp  =p.GetMigratableProcess();
+		//p.PrintCommand();
+		MigratableProcess mp  = p.GetMigratableProcess();
 		Thread t = new Thread(mp);
-		System.out.println("start running the new coming process!");
+		System.out.println("*******************************");
+		System.out.println("start running the new coming process "+ mp.toString()+"...");
+		System.out.println("*******************************");
 		synchronized(this._client.ClientListMutex) {
 			this._client.GetProcessList().put(t, mp);
 		}

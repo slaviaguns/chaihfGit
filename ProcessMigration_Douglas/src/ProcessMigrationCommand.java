@@ -21,7 +21,7 @@ public class ProcessMigrationCommand extends Command{
 	}
 	
 	public int GetDesPort() {
-		System.out.println("desport: "+ this._desPort);
+		//System.out.println("desport: "+ this._desPort);
 		return this._desPort;
 		
 	}

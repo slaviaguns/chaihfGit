@@ -18,7 +18,7 @@ public class CommandSender implements Runnable{
 		this._desHostName = c.GetHostName();
 		this._desPort = c.GetPort();
 		this._cmd = c;
-		System.out.println("******* "+this._desHostName+" "+this._desPort+" "+this._cmd.GetType());
+		//System.out.println("******* "+this._desHostName+" "+this._desPort+" "+this._cmd.GetType());
 	}
 	
 	@Override

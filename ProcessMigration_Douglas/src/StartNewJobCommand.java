@@ -25,9 +25,11 @@ public class StartNewJobCommand extends Command{
 	}
 	@Override 
 	public void PrintCommand() {
-		System.out.println("HostName: "+ super.GetHostName() + " Port: "+super.GetPort() + " Type: Start_New_Job");
+		System.out.println("*******************************");
+		System.out.println(super.GetHostName() + ":"+super.GetPort() +" receive command. "+ " Type: Start_New_Process");
+		System.out.println("Process name and arguements:");
 		for(int i = 0; i<length; i++) 
 			System.out.print(this._args[i]+" ");
-		System.out.println("====================");
+		System.out.println("\n*******************************");
 	}
 }
