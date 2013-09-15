@@ -1,4 +1,8 @@
-
+/**
+ * 
+ * @author hefuchai
+ * ServerWorkloadChecker periodically checks the workload of each clients.
+ */
 public class ServerWorkloadChecker implements Runnable{
 	
 	public ServerWorkloadChecker() {}

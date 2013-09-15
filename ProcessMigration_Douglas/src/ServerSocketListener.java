@@ -4,7 +4,11 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
+/**
+ * 
+ * @author hefuchai
+ * The server socket listener
+ */
 public class ServerSocketListener implements Runnable{
 	private final int POOL_SIZE = 10;
 	

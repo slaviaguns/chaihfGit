@@ -3,7 +3,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
 import java.io.Serializable; 
-
+/**
+ * 
+ * @author hefuchai
+ * TransactionalFileInputStream extends InputStream, which mainly used to record the
+ * offset of read files.
+ */
 public class TransactionalFileInputStream extends InputStream implements Serializable {
 
 	private int _offset;

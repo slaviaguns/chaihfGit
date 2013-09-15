@@ -7,6 +7,10 @@ import java.io.Serializable;
 
 public interface MigratableProcess extends Runnable, Serializable{
 
+	void SetPid(int p);
+	
+	int GetPid();
+	
 	String toString();
 	
 	void suspend();

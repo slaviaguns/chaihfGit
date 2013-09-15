@@ -68,6 +68,8 @@ public class ClientCmdHandler extends CommandHandler{
 	              .newInstance(obj);
 	      Thread thread = new Thread(process);
 	      synchronized(this._client.ClientListMutex) {
+		   	  process.SetPid(ProcessManagerClient.MigratableProcessPid);
+		   	  ProcessManagerClient.MigratableProcessPid++; 
 	    	  this._client.GetProcessList().put(thread, process);
 	      }	      
 	      
@@ -76,13 +78,15 @@ public class ClientCmdHandler extends CommandHandler{
 	
 	public void HandlePrintProcess(PrintProcessCommand p) {
 		System.out.println("*******************************");
-		int i = 1;
+//		int i = 1;
 		System.out.println("The Process list of " + this._client.GetClientMeta().getHostName()+":"+this._client.GetClientMeta().getPort()+"");
 		synchronized(this._client.ClientListMutex) {
 			Iterator iter = this._client.GetProcessList().entrySet().iterator(); 
 			while(iter.hasNext()) {
-			  Map.Entry entry = (Map.Entry) iter.next(); 				
-			  System.out.println(i+". "+entry.getValue().toString());					  
+			  Map.Entry entry = (Map.Entry) iter.next(); 
+			  MigratableProcess m = (MigratableProcess)entry.getValue();
+			  System.out.println("PID: "+m.GetPid()+" "+entry.getValue().toString());
+//			  i++;
 			}
 		}
 		System.out.println("*******************************");

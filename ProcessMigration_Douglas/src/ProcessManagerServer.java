@@ -10,7 +10,13 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-
+/**
+ * 
+ * @author hefuchai
+ *The ProcessManagerServer setup as a server, which connect to every client.
+ *The server provides three thread: 1. main thread handles console input, 2. Listen to the heartbeat from clients
+ *3. Check the workload of clients periodically
+ */
 public class ProcessManagerServer {
 	private static Map<String, Integer> clientList = new HashMap<String, Integer>();
 	
@@ -18,6 +24,7 @@ public class ProcessManagerServer {
 	
 	private String _hostName;
 	
+	//Commands from console input
 	private String LS = "ls";
 	
 	private String PS = "ps";
@@ -26,7 +33,7 @@ public class ProcessManagerServer {
 	
 	private String MIG = "migrate";
 
-	
+	//The list of clients
 	public static Map<String, Integer> GetClientList() {
 		return clientList;
 	}
@@ -78,7 +85,10 @@ public class ProcessManagerServer {
 		   }
 		   return true;
 		} 
-	//migrate (src)localhost:10005 (des)localhost:10004 1
+	
+	/*Send migrate process command to Clients
+	 * migrate (src)localhost:10005 (des)localhost:10004 1
+	 */
 	public void MigrateCommand(String input) {
 		boolean flag = false;
 		boolean flag1 = false;
@@ -124,7 +134,9 @@ public class ProcessManagerServer {
 		}
 	}
 	
-	//ls
+	/* List the clients connecting to server
+	 * ls
+	 */
 	public void LSCommand(String input) {
 		if(input.split(" ").length != 1)
 			System.out.println("Usage: ls");
@@ -140,7 +152,9 @@ public class ProcessManagerServer {
 		}
 	}
 	
-	//ps localhost:10001
+	/* Send printing process list command to Clients
+	 * ps localhost:10001
+	 */
 	public void PSCommand(String input) {
 		boolean flag = false;
 		if(input.split(" ").length == 2) {
@@ -166,7 +180,9 @@ public class ProcessManagerServer {
 
 	}
 	
-	//run localhost:10005 processName arg1 arg2 ...
+	/* Send instantiate a new process command to Clients, including the arguements
+	 * run localhost:10005 processName arg1 arg2 ...
+	 */
 	public void RunCommand(String input) {
 		boolean flag = false;
 		String[] arg = input.split(" ");

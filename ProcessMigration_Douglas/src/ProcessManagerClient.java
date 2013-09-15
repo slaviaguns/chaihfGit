@@ -7,11 +7,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * 
+ * @author hefuchai
+ *ProcessManagerClient setup as a dummy client node, which execute the commands from server.
+ *The client provides two threads: 1. Listen to the any socket connection. 2. Send heartbeat to server periodically
+ *
+ */
+
 public class ProcessManagerClient {
+	public static int MigratableProcessPid = 0; //The pid for new spawn processes
 	
-	private Map<Thread, MigratableProcess> ProcessList = new HashMap<Thread, MigratableProcess>();
-	private ClientMeta clientMeta;
-	public Integer ClientListMutex = 0;
+	private Map<Thread, MigratableProcess> ProcessList = new HashMap<Thread, MigratableProcess>(); //list of process
+	private ClientMeta clientMeta; //The meta data of client
+	public Integer ClientListMutex = 0; //mutex for critical area of client
 	
 	public ProcessManagerClient(String hn, String port) {
 		this.clientMeta = new ClientMeta(Integer.parseInt(port), hn);

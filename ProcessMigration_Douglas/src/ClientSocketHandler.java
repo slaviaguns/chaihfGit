@@ -2,8 +2,12 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-/*
+/**
  * 
+ * @author hefuchai
+ * Each client will setup a listener to listen from other connection.
+ * The connection could be from server and other clients.
+ * A new thread will be provide to handle the commands.
  */
 
 public class ClientSocketHandler implements Runnable{

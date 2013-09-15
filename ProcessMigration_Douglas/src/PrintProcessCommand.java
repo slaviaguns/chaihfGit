@@ -1,4 +1,8 @@
-
+/**
+ * 
+ * @author hefuchai
+ * PrintProcessCommand extends Command to inform clients of printing its process list
+ */
 public class PrintProcessCommand extends Command{
 	
 	public PrintProcessCommand(String hn, int port) {

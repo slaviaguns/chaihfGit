@@ -12,9 +12,18 @@ public class GrepProcess implements MigratableProcess
 	private TransactionalFileInputStream  inFile;
 	private TransactionalFileOutputStream outFile;
 	private String query;
+	private int pid;
 
 	private volatile boolean suspending;
 
+	@Override
+	public int GetPid() {
+		return this.pid;
+	}
+	
+	public void SetPid(int p) {
+		this.pid = p;
+	}
 	@Override
 	public String toString() {
 		String name = "GrepProcess";

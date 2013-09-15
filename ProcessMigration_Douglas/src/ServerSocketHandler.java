@@ -1,7 +1,13 @@
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.net.Socket;
-
+/**
+ * 
+ * @author hefuchai
+ * The server setup a listener to hear the heartbeat from clients.
+ * server will generate a handler to handle what it received.
+ * The heartbeat includes the info about client, with which server maintains client list.
+ */
 
 public class ServerSocketHandler implements Runnable{
 

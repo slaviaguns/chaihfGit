@@ -1,10 +1,14 @@
 import java.io.Serializable;
 
-/*
- * The command sent between clients and server
+/**
+ * 
+ * @author hefuchai
+ * The command sent between clients and server.
+ * It is an abstract class which will be extended by specific commands
  */
 public abstract class Command implements Serializable{
 	public enum cmdType {
+		//The command type
 		HEART_BEAT(0), PROCESS_MIGRATION(1), NEW_PROCESS_INSTANCE(2),PRINT_PROCESS(3), PROCESS_COMING(4);
 		private int _type;
 		private cmdType(int a) {

@@ -1,5 +1,10 @@
 
-
+/**
+ * 
+ * @author hefuchai
+ * Heartbeat command extends Command, which includes the hostname and port of
+ * clients and its workload
+ */
 
 public class HeartbeatCommand extends Command{
 	//public HeartbeatCommand() {}

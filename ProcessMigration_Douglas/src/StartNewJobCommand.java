@@ -1,4 +1,9 @@
-
+/**
+ * 
+ * @author hefuchai
+ * StartNewJobCommand extends Command, which inform the client of 
+ * instantiating a new process with the arguments.
+ */
 public class StartNewJobCommand extends Command{
 	private String[] _args = null;
 	private int length;

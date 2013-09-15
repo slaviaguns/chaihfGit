@@ -1,5 +1,11 @@
 
-
+/**
+ * 
+ * @author hefuchai
+ * ProcessCommand extends Command, which contains the information of
+ * migrated process. The receiver could use this info to resume the 
+ * migrated process.
+ */
 
 public class ProcessCommand extends Command{
 	

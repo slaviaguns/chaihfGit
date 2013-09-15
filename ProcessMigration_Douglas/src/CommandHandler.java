@@ -1,4 +1,6 @@
-/*
+/**
+ * 
+ * @author hefuchai
  * the abstract command handler for both server and client
  */
 public abstract class CommandHandler implements Runnable{

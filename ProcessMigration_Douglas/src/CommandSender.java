@@ -3,7 +3,11 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
+/**
+ * 
+ * @author hefuchai
+ * The commandsender send commands to the targeted clients
+ */
 public class CommandSender implements Runnable{
 	private int _desPort;
 	private String _desHostName;

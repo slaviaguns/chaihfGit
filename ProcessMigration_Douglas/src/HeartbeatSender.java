@@ -2,7 +2,11 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
-
+/**
+ * 
+ * @author hefuchai
+ * HeartbeatSender is used by clients to send heartbeat to server
+ */
 public class HeartbeatSender implements Runnable{
 	 private Socket socket = null;
      private int port = 10001;

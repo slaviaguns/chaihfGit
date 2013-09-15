@@ -1,4 +1,10 @@
-
+/**
+ * 
+ * @author hefuchai
+ * ProcessMigrationCommand extends Command, which includes the destination hostname and port to
+ * migrate the process. 
+ * User should input the number of process to be migrated.
+ */
 
 
 public class ProcessMigrationCommand extends Command{

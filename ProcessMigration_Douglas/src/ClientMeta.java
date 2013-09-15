@@ -1,5 +1,7 @@
-/*
+/**
  * the meta data of clients
+ * @author hefuchai
+ *
  */
 public class ClientMeta {
 	private int _port;
