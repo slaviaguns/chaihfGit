@@ -43,7 +43,10 @@ public class ProcessManagerClient {
 	
 	public static void main(String[] arg) throws IOException, InstantiationException, IllegalAccessException {
 		// TODO Auto-generated method stub
-		
+		if(arg.length != 3) {
+			System.err.println("You only input: "+arg.length);
+			return;
+		}
 		ProcessManagerClient pmc = new ProcessManagerClient(arg[1], arg[2]);
 		System.out.println("ProcessManagerClient "+ pmc.GetClientMeta().getHostName()+":" +pmc.GetClientMeta().getPort()
 				+" is running...");
